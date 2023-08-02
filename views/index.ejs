@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Food Project</title>
+</head>
+<body>
+  <!-- Include the header partial -->
+  <%- include('./partials/header.ejs') %>
+
+  <main>
+    <!-- Your main content goes here -->
+    <h1>Welcome to my website!</h1>
+    <p>This is the home page content.</p>
+    <div class="container">
+      
+      <form id="myForm" method="post">
+        <label for="idInput">Maximum Calories:</label>
+        <input type="number" id="maxCaloriesInput" name="maxCalories">
+  
+        <label for="secretInput">Minimum Protein:</label>
+        <input type="number" id="minProteinInput" name="minProtein">
+  
+        <label for="scoreInput">Minimum Carbohidrates:</label>
+        <input type="number" id="minCarbInput" name="minCarbs">
+
+        <label for="scoreInput">Minimum Fat:</label>
+        <input type="number" id="minFatInput" name="minFat">
+  
+        <label for="submit">Route:</label>
+        <input id="get" type="submit" value="SEARCH" formaction="/get-recipe">
+      </form>
+    </div>
+    
+      <h1>Recipes</h1>
+      <%= content %>
+      <div>
+        <%if (locals.content) {%>
+          <h2>Title: <%= content.title %></h2>
+          <a href="<%= content.image %>">
+            <img src="<%= content.image %>" alt="<%= content.title %>" width="200">
+          </a>
+          <p>Calories: <%= locals.content.calories %></p>
+          <p>Protein: <%= content.protein %></p>
+          <p>Fat: <%= content.fat %></p>
+          <p>Carbs: <%= content.carbs %></p>
+          <hr>
+        <% } %>
+        <%if (locals.error) {%>
+          <div id="tag-error" class="tag-error">
+            <%=error%>
+          </div>
+          <%}%>
+      
+    </div>
+  </main>
+
+  <!-- Include the footer partial -->
+  <%- include('./partials/footer.ejs') %>
+
+</body>
+</html>
