@@ -37,12 +37,11 @@ const options = {
 }
 try {
   const result = await axios.request(options);
-  console.log(result.data)
-  console.log(result)
-  res.render("index.ejs", {content : JSON.stringify(result.data)});
+  const recipes = result.data
+  res.render("index.ejs", {content : recipes});
 } catch (error) {
   console.error(error)
-  res.render("index.ejs", { content: JSON.stringify(error.result) });
+  res.render("index.ejs", { content: [] }); 
 }
 });
 

@@ -32,26 +32,24 @@
     </div>
     
       <h1>Recipes</h1>
-      <%= content %>
-      <div>
-        <%if (locals.content) {%>
-          <h2>Title: <%= content.title %></h2>
-          <a href="<%= content.image %>">
-            <img src="<%= content.image %>" alt="<%= content.title %>" width="200">
-          </a>
-          <p>Calories: <%= locals.content.calories %></p>
-          <p>Protein: <%= content.protein %></p>
-          <p>Fat: <%= content.fat %></p>
-          <p>Carbs: <%= content.carbs %></p>
-          <hr>
-        <% } %>
-        <%if (locals.error) {%>
-          <div id="tag-error" class="tag-error">
-            <%=error%>
-          </div>
-          <%}%>
-      
+      <div class="container">
+      <% if (Array.isArray(content)) { %>
+        <% content.forEach(recipe => { %>
+        <div class="recipe-card">
+          <h2><%= recipe.title %></h2>
+          <img src="<%= recipe.image %>" alt="Recipe Image" />
+          <p>Calories: <%= recipe.calories %></p>
+          <p>Protein: <%= recipe.protein %></p>
+          <p>Fat: <%= recipe.fat %></p>
+          <p>Carbs: <%= recipe.carbs %></p>
+        </div>
+        <% }) %>
+      <% } else { %>
+        <p>No recipes found.</p>
+      <% } %>
     </div>
+      
+    
   </main>
 
   <!-- Include the footer partial -->
