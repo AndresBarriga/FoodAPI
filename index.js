@@ -1,8 +1,9 @@
 import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
+import dotenv from "dotenv";
 
-
+dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -11,7 +12,7 @@ const port = 3000;
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const rapidAPIKey = "d227a23bc2msh1eed8f473a8f31ap198f9djsn40b82305cb9d";
+const rapidAPIKey = process.env.RAPID_API_KEY;
 
 
 app.get("/", (req, res) => {
