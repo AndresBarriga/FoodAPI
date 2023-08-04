@@ -35,7 +35,7 @@
       <div class="container">
       <% if (Array.isArray(content)) { %>
         <% content.forEach(recipe => { %>
-        <div class="recipe-card">
+        <div class="recipe-card" >
           <h2><%= recipe.title %></h2>
           <img src="<%= recipe.image %>" alt="Recipe Image" />
           <p>Calories: <%= recipe.calories %></p>
