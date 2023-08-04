@@ -46,6 +46,25 @@ try {
 }
 });
 
+// Route to fetch additional information for a specific recipe
+app.get("/recipe/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const response = await axios.get(`https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/${id}/information`, {
+      headers: {
+        'X-RapidAPI-Key': rapidAPIKey,
+        'X-RapidAPI-Host': 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com'
+      }
+    });
+    const recipeDetails = response.data;
+    res.send(recipeDetails); // You can format this data as needed and pass it to the view
+  } catch (error) {
+    console.error("Error fetching recipe information:", error);
+    res.status(500).send({ error: "Failed to fetch recipe information." });
+  }
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

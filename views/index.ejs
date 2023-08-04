@@ -1,7 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <title>My Food Project</title>
+  <style>
+    .recipes-container {
+      background-color: #87baf0;
+      border-radius: 10px; 
+      padding: 20px; 
+      margin-bottom: 20px; 
+    }
+
+    #get {
+      background-color: #c5e3ff; 
+      color:#2d2d2d ;
+      font-weight: bold;
+      border-width: 1,5px;
+    }
+  </style>
 </head>
 <body>
   <!-- Include the header partial -->
@@ -9,51 +26,154 @@
 
   <main>
     <!-- Your main content goes here -->
-    <h1>Welcome to my website!</h1>
-    <p>This is the home page content.</p>
-    <div class="container">
-      
+    <h1>Welcome to the recipe finder</h1>
+    <p>Here you can get ideas for cooking something based on your nutrients needs.</p>
+    <div class="container mt-5">
       <form id="myForm" method="post">
-        <label for="idInput">Maximum Calories:</label>
-        <input type="number" id="maxCaloriesInput" name="maxCalories">
-  
-        <label for="secretInput">Minimum Protein:</label>
-        <input type="number" id="minProteinInput" name="minProtein">
-  
-        <label for="scoreInput">Minimum Carbohidrates:</label>
-        <input type="number" id="minCarbInput" name="minCarbs">
-
-        <label for="scoreInput">Minimum Fat:</label>
-        <input type="number" id="minFatInput" name="minFat">
-  
-        <label for="submit">Route:</label>
-        <input id="get" type="submit" value="SEARCH" formaction="/get-recipe">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="idInput">Maximum Calories:</label>
+            <input type="number" class="form-control" id="maxCaloriesInput" name="maxCalories" placeholder="Enter maximum cals">
+          </div>
+          <div class="col-md-6">
+            <label for="secretInput">Minimum Protein:</label>
+            <input type="number" class="form-control" id="minProteinInput" name="minProtein" placeholder="Enter minimum protein">
+          </div>
+        </div>
+        <div class="row mt-md-3">
+          <div class="col-md-6">
+            <label for="scoreInput">Minimum Carbohidrates:</label>
+            <input type="number" class="form-control" id="minCarbInput" name="minCarbs" placeholder="Enter minimum carbs">
+          </div>
+          <div class="col-md-6">
+            <label for="scoreInput">Minimum Fat:</label>
+            <input type="number" class="form-control" id="minFatInput" name="minFat" placeholder="Enter minimum fat">
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-12 d-flex justify-content-center">
+            <input id="get" class="btn btn-primary" type="submit" value="SEARCH" formaction="/get-recipe">
+          </div>
+        </div>
       </form>
     </div>
-    
+
+    <div class="container mt-5 recipes-container"> 
       <h1>Recipes</h1>
       <div class="container">
+      <div class="row">
       <% if (Array.isArray(content)) { %>
         <% content.forEach(recipe => { %>
-        <div class="recipe-card">
-          <h2><%= recipe.title %></h2>
-          <img src="<%= recipe.image %>" alt="Recipe Image" />
+          <div class="col-md-6">
+            <div class="card mb-4">
+              <div class="card-header"><h2><%= recipe.title %></h2></div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="<%= recipe.image %>" alt="Recipe Image" class="img-fluid">
+                  </div>
+                  <div class="col-md-8">
           <p>Calories: <%= recipe.calories %></p>
           <p>Protein: <%= recipe.protein %></p>
           <p>Fat: <%= recipe.fat %></p>
           <p>Carbs: <%= recipe.carbs %></p>
+          <a href="#" class="show-details-link" data-id="<%= recipe.id %>">Show Complete Recipe</a>
+          <div class="health-score-container" style="display: none;"></div>
+          <div class="ready-in-minutes-container" style="display: none;"></div>
+          <div class="summary-container" style="display: none;"></div>
+          <div class="ingredients-container" style="display: none;"></div>
+          <div class="instructions-container" style="display: none;"></div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
         <% }) %>
       <% } else { %>
-        <p>No recipes found.</p>
+        <p>Please enter the criteria to start a new search.</p>
       <% } %>
     </div>
-      
-    
   </main>
 
   <!-- Include the footer partial -->
   <%- include('./partials/footer.ejs') %>
 
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Attach click event to "Show Complete Recipe" links
+    const showDetailsLinks = document.querySelectorAll(".show-details-link");
+    showDetailsLinks.forEach(link => {
+      link.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const recipeId = link.dataset.id;
+      
+        try {
+          const response = await axios.get(`/recipe/${recipeId}`);
+          const recipeDetails = response.data;
+
+          const cardBody = link.closest(".card-body");
+
+          if (cardBody) {
+
+            const healthScoreContainer = cardBody.querySelector(".health-score-container");
+                if (healthScoreContainer) {
+                    healthScoreContainer.innerHTML = "Health Score: " + recipeDetails.healthScore;
+                    healthScoreContainer.style.display = "block"; 
+                }
+            const dietsContainer = cardBody.querySelector(".diets-container");
+                if (dietsContainer) {
+                    dietsContainer.innerHTML = "Diets: " + recipeDetails.diets.join(", ");
+                    dietsContainer.style.display = "block";
+                }
+            const readyInMinutesContainer = cardBody.querySelector(".ready-in-minutes-container");
+                if (readyInMinutesContainer) {
+                    readyInMinutesContainer.innerHTML = "Ready in Minutes: " + recipeDetails.readyInMinutes;
+                    readyInMinutesContainer.style.display = "block"; 
+                }
+            const summaryContainer = cardBody.querySelector(".summary-container");
+                if (summaryContainer) {
+                  summaryContainer.innerHTML = "Summary: " + recipeDetails.summary;
+                  summaryContainer.style.display = "block";
+                }
+            const ingredientsContainer = cardBody.querySelector(".ingredients-container");
+            if (ingredientsContainer) {
+              // Loop through the extended ingredients and display the originalString
+              const extendedIngredients = recipeDetails.extendedIngredients;
+              let ingredientsHTML = "<h3>Ingredients:</h3><ul>";
+              extendedIngredients.forEach(ingredient => {
+                ingredientsHTML += `<li>${ingredient.original}</li>`;
+              });
+              ingredientsHTML += "</ul>";
+              ingredientsContainer.innerHTML = ingredientsHTML;
+              ingredientsContainer.style.display = "block";
+          } else {
+            const noIngredientsMessage = document.createElement("li");
+            noIngredientsMessage.textContent = "No ingredients information available.";
+            ingredientsContainer.appendChild(noIngredientsMessage);
+          }
+            
+          }
+            const instructionsContainer = cardBody.querySelector(".instructions-container");
+            if (instructionsContainer) {
+              // Check if instructions are null / sometimes this API does not provide instructions
+              const instructions = recipeDetails.instructions;
+              if (instructions && instructions !== "null") {
+                instructionsContainer.innerHTML = `<h3>Instructions:</h3><p>${instructions}</p>`;
+              } else {
+                instructionsContainer.innerHTML = "<p>No detailed instructions for this recipe are available.</p>";
+              }
+              instructionsContainer.style.display = "block"; // Show the instructions container
+            }
+          }
+
+         catch (error) {
+          console.error("Error fetching recipe information:", error);
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
