@@ -2,6 +2,7 @@ import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const port = 3000;
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 const rapidAPIKey = process.env.RAPID_API_KEY;
 
