@@ -1,7 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <title>My Food Project</title>
+  <style>
+    .recipes-container {
+      background-color: #87baf0;
+      border-radius: 10px; 
+      padding: 20px; 
+      margin-bottom: 20px; 
+    }
+
+    #get {
+      background-color: #c5e3ff; 
+      color:#2d2d2d ;
+      font-weight: bold;
+      border-width: 1,5px;
+    }
+  </style>
 </head>
 <body>
   <!-- Include the header partial -->
@@ -16,7 +33,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-        <a class="navbar-brand bg-primary" href="#">Food Page!</a>
+        <a class="navbar-brand" href="#">Your food page</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -26,10 +43,10 @@
               <a class="nav-link" href="#">Home <span class="sr-only"></span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
+              <a class="nav-link" href="#">Pricing</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Premium Version</a>
             </li>
           </ul>
         </div>
@@ -39,6 +56,7 @@
 </html>
 
   <main>
+    <!-- Your main content goes here -->
     <h1>Welcome to the recipe finder</h1>
     <p>Here you can get ideas for cooking something based on your nutrients needs.</p>
     <div class="container mt-5">
@@ -70,42 +88,14 @@
         </div>
       </form>
     </div>
-    
+
     <div class="container mt-5 recipes-container"> 
       <h1>Recipes</h1>
       <div class="container">
       <div class="row">
-      <% if (Array.isArray(content)) { %>
-        <% content.forEach(recipe => { %>
-          <div class="col-md-6">
-            <div class="card mb-4">
-              <div class="card-header"><h2><%= recipe.title %></h2></div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img src="<%= recipe.image %>" alt="Recipe Image" class="img-fluid">
-                  </div>
-                  <div class="col-md-8">
-          <p>Calories: <%= recipe.calories %></p>
-          <p>Protein: <%= recipe.protein %></p>
-          <p>Fat: <%= recipe.fat %></p>
-          <p>Carbs: <%= recipe.carbs %></p>
-          <a href="#" class="show-details-link" data-id="<%= recipe.id %>">Show Complete Recipe</a>
-          <div class="health-score-container" style="display: none;"></div>
-          <div class="diets-container" style="display: none;"></div>
-          <div class="ready-in-minutes-container" style="display: none;"></div>
-          <div class="summary-container" style="display: none;"></div>
-          <div class="ingredients-container" style="display: none;"></div>
-          <div class="instructions-container" style="display: none;"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-        <% }) %>
-      <% } else { %>
-        <p>Please enter the criteria to start a new search.</p>
-      <% } %>
+      
+        
+      
     </div>
   </main>
 
@@ -116,96 +106,100 @@
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
         <div class="col-md-4 d-flex align-items-center">
           <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
-             <img class="featurette-image img-fluid mx-auto" src="public/images/Logo.jpg" alt="Logo" width="30" height="24"> 
+             <img class="featurette-image img-fluid mx-auto" src="images/Logo.jpg" alt="Logo" width="30" height="24"> 
           <span class="mb-3 mb-md-0 text-body-secondary">© Andres 2023 Company, Inc</span>
         </div>
     
         <ul class="nav col-md-4 justify-content-end list-unstyled">
             <li style="display: inline-block;">
-              <img class="featurette-image img-fluid mx-auto" src="public/images/instagram-svgrepo-com.png" alt="insta" width="24" height="24">
+              <img class="featurette-image img-fluid mx-auto" src="images/instagram-svgrepo-com.png" alt="insta" width="24" height="24">
             </li>
             <li style="display: inline-block;">
-              <img class="featurette-image img-fluid mx-auto" src="public/images/linkedin-svgrepo-com.png" alt="LinkedIn" width="24" height="24">
+              <img class="featurette-image img-fluid mx-auto" src="images/linkedin-svgrepo-com.png" alt="LinkedIn" width="24" height="24">
             </li>
             <li style="display: inline-block;">
-              <img class="featurette-image img-fluid mx-auto" src="public/images/twitter-svgrepo-com.png" alt="Twitter" width="22" height="21">
+              <img class="featurette-image img-fluid mx-auto" src="images/twitter-svgrepo-com.png" alt="Twitter" width="22" height="21">
             </li>
           </ul>
       </footer>
-      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>	
-      <script>	
-        document.addEventListener("DOMContentLoaded", () => {	
-          // Attach click event to "Show Complete Recipe" links	
-          const showDetailsLinks = document.querySelectorAll(".show-details-link");	
-          showDetailsLinks.forEach(link => {	
-            link.addEventListener("click", async (event) => {	
-              event.preventDefault();	
-              const recipeId = link.dataset.id;	
-              
-              try {	
-                const response = await axios.get(`/recipe/${recipeId}`);	
-                const recipeDetails = response.data;	
-                const cardBody = link.closest(".card-body");	
-                if (cardBody) {	
-                  const healthScoreContainer = cardBody.querySelector(".health-score-container");	
-                      if (healthScoreContainer) {	
-                          healthScoreContainer.innerHTML = "Health Score: " + recipeDetails.healthScore;	
-                          healthScoreContainer.style.display = "block"; 	
-                      }	
-                  const dietsContainer = cardBody.querySelector(".diets-container");	
-                      if (dietsContainer) {	
-                          dietsContainer.innerHTML = "Diets: " + recipeDetails.diets.join(", ");	
-                          dietsContainer.style.display = "block";	
-                      }	
-                  const readyInMinutesContainer = cardBody.querySelector(".ready-in-minutes-container");	
-                      if (readyInMinutesContainer) {	
-                          readyInMinutesContainer.innerHTML = "Ready in Minutes: " + recipeDetails.readyInMinutes;	
-                          readyInMinutesContainer.style.display = "block"; 	
-                      }	
-                  const summaryContainer = cardBody.querySelector(".summary-container");	
-                      if (summaryContainer) {	
-                        summaryContainer.innerHTML = "Summary: " + recipeDetails.summary;	
-                        summaryContainer.style.display = "block";	
-                      }	
-                  const ingredientsContainer = cardBody.querySelector(".ingredients-container");	
-                  if (ingredientsContainer) {	
-                    // Loop through the extended ingredients and display the originalString	
-                    const extendedIngredients = recipeDetails.extendedIngredients;	
-                    let ingredientsHTML = "<h3>Ingredients:</h3><ul>";	
-                    extendedIngredients.forEach(ingredient => {	
-                      ingredientsHTML += `<li>${ingredient.original}</li>`;	
-                    });	
-                    ingredientsHTML += "</ul>";	
-                    ingredientsContainer.innerHTML = ingredientsHTML;	
-                    ingredientsContainer.style.display = "block";	
-                } else {	
-                  const noIngredientsMessage = document.createElement("li");	
-                  noIngredientsMessage.textContent = "No ingredients information available.";	
-                  ingredientsContainer.appendChild(noIngredientsMessage);	
-                }	
-                    
-                }	
-                  const instructionsContainer = cardBody.querySelector(".instructions-container");	
-                  if (instructionsContainer) {	
-                    // Check if instructions are null / sometimes this API does not provide instructions	
-                    const instructions = recipeDetails.instructions;	
-                    if (instructions && instructions !== "null") {	
-                      instructionsContainer.innerHTML = `<h3>Instructions:</h3><p>${instructions}</p>`;	
-                    } else {	
-                      instructionsContainer.innerHTML = "<p>No detailed instructions for this recipe are available.</p>";	
-                    }	
-                    instructionsContainer.style.display = "block"; // Show the instructions container	
-                  }	
-                }	
-               catch (error) {	
-                console.error("Error fetching recipe information:", error);	
-              }	
-            });	
-          });	
-        });	
-      </script>	
-      </body>	
-      </html>
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Attach click event to "Show Complete Recipe" links
+    const showDetailsLinks = document.querySelectorAll(".show-details-link");
+    showDetailsLinks.forEach(link => {
+      link.addEventListener("click", async (event) => {
+        event.preventDefault();
+        const recipeId = link.dataset.id;
+      
+        try {
+          const response = await axios.get(`/recipe/${recipeId}`);
+          const recipeDetails = response.data;
+
+          const cardBody = link.closest(".card-body");
+
+          if (cardBody) {
+
+            const healthScoreContainer = cardBody.querySelector(".health-score-container");
+                if (healthScoreContainer) {
+                    healthScoreContainer.innerHTML = "Health Score: " + recipeDetails.healthScore;
+                    healthScoreContainer.style.display = "block"; 
+                }
+            const dietsContainer = cardBody.querySelector(".diets-container");
+                if (dietsContainer) {
+                    dietsContainer.innerHTML = "Diets: " + recipeDetails.diets.join(", ");
+                    dietsContainer.style.display = "block";
+                }
+            const readyInMinutesContainer = cardBody.querySelector(".ready-in-minutes-container");
+                if (readyInMinutesContainer) {
+                    readyInMinutesContainer.innerHTML = "Ready in Minutes: " + recipeDetails.readyInMinutes;
+                    readyInMinutesContainer.style.display = "block"; 
+                }
+            const summaryContainer = cardBody.querySelector(".summary-container");
+                if (summaryContainer) {
+                  summaryContainer.innerHTML = "Summary: " + recipeDetails.summary;
+                  summaryContainer.style.display = "block";
+                }
+            const ingredientsContainer = cardBody.querySelector(".ingredients-container");
+            if (ingredientsContainer) {
+              // Loop through the extended ingredients and display the originalString
+              const extendedIngredients = recipeDetails.extendedIngredients;
+              let ingredientsHTML = "<h3>Ingredients:</h3><ul>";
+              extendedIngredients.forEach(ingredient => {
+                ingredientsHTML += `<li>${ingredient.original}</li>`;
+              });
+              ingredientsHTML += "</ul>";
+              ingredientsContainer.innerHTML = ingredientsHTML;
+              ingredientsContainer.style.display = "block";
+          } else {
+            const noIngredientsMessage = document.createElement("li");
+            noIngredientsMessage.textContent = "No ingredients information available.";
+            ingredientsContainer.appendChild(noIngredientsMessage);
+          }
+            
+          }
+            const instructionsContainer = cardBody.querySelector(".instructions-container");
+            if (instructionsContainer) {
+              // Check if instructions are null / sometimes this API does not provide instructions
+              const instructions = recipeDetails.instructions;
+              if (instructions && instructions !== "null") {
+                instructionsContainer.innerHTML = `<h3>Instructions:</h3><p>${instructions}</p>`;
+              } else {
+                instructionsContainer.innerHTML = "<p>No detailed instructions for this recipe are available.</p>";
+              }
+              instructionsContainer.style.display = "block"; // Show the instructions container
+            }
+          }
+
+         catch (error) {
+          console.error("Error fetching recipe information:", error);
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
