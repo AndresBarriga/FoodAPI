@@ -12,7 +12,7 @@ const port = 3000;
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const rapidAPIKey = process.env.RAPID_API_KEY;
+const rapidAPIKey = "d0f4b83629msh1748c058634af2fp1d4b66jsn4fa141e458b3";
 
 
 app.get("/", (req, res) => {
